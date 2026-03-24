@@ -1,0 +1,44 @@
+#include <stdio.h>
+#define MAX 5
+
+int dq[MAX];
+int front = -1, rear = -1;
+
+void insertFront(int x) {
+    if((front == 0 && rear == MAX - 1) || (front == rear + 1)) {
+        printf("Full\n");
+        return;
+    }
+    if(front == -1) front = rear = 0;
+    else if(front == 0) front = MAX - 1;
+    else front--;
+    dq[front] = x;
+}
+
+void insertRear(int x) {
+    if((front == 0 && rear == MAX - 1) || (front == rear + 1)) {
+        printf("Full\n");
+        return;
+    }
+    if(front == -1) front = rear = 0;
+    else if(rear == MAX - 1) rear = 0;
+    else rear++;
+    dq[rear] = x;
+}
+
+void display() {
+    int i = front;
+    while(1) {
+        printf("%d ", dq[i]);
+        if(i == rear) break;
+        i = (i + 1) % MAX;
+    }
+}
+
+int main() {
+    insertRear(10);
+    insertFront(5);
+    insertRear(20);
+    display();
+    return 0;
+}
