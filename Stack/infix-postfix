@@ -1,0 +1,46 @@
+#include <stdio.h>
+#include <ctype.h>
+
+char stack[100];
+int top = -1;
+
+void push(char x) { stack[++top] = x; }
+char pop() { return stack[top--]; }
+
+int precedence(char x) {
+    if(x == '+' || x == '-') return 1;
+    if(x == '*' || x == '/') return 2;
+    return 0;
+}
+
+int main() {
+    char exp[100], output[100];
+    int k = 0;
+
+    printf("Enter expression: ");
+    scanf("%s", exp);
+
+    for(int i = 0; exp[i]; i++) {
+        if(isalnum(exp[i]))
+            output[k++] = exp[i];
+        else if(exp[i] == '(')
+            push(exp[i]);
+        else if(exp[i] == ')') {
+            while(stack[top] != '(')
+                output[k++] = pop();
+            pop();
+        } else {
+            while(top != -1 && precedence(stack[top]) >= precedence(exp[i]))
+                output[k++] = pop();
+            push(exp[i]);
+        }
+    }
+
+    while(top != -1)
+        output[k++] = pop();
+
+    output[k] = '\0';
+
+    printf("Postfix: %s", output);
+    return 0;
+}
